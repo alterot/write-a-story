@@ -1,0 +1,57 @@
+.task-box {
+  position: absolute;
+  width: 120px;
+  padding: 1rem;
+  background: white;
+  border: 3px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.task-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.task-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+/* Active state */
+.task-box.active {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f5f7ff 0%, #e8ebff 100%);
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+/* Pulse animation för active task */
+.active-pulse {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}

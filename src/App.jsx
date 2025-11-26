@@ -1,19 +1,32 @@
 import { useState } from 'react'
 import './App.css'
 import InputArea from './components/InputArea'
+import WorkArea from './components/WorkArea'
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isWorking, setIsWorking] = useState(false)
+  const [workSteps, setWorkSteps] = useState([])
 
   const handleCreateStory = (userInput) => {
-    console.log('Användaren vill ha en saga om:', userInput)
-    setIsLoading(true)
+    console.log('Skapar saga om:', userInput)
+    setIsWorking(true)
     
-    // Simulera att något händer (tar bort senare)
+    // Simulera ett arbetsflöde
+    const steps = [
+      { agentId: 'stella', taskId: 'planning', duration: 2000 },
+      { agentId: 'luna', taskId: 'writing', duration: 3000 },
+      { agentId: 'pixel', taskId: 'drawing', duration: 3000 },
+      { agentId: 'nova', taskId: 'reviewing', duration: 2000 },
+      { agentId: 'stella', taskId: 'done', duration: 1000 }
+    ]
+    
+    setWorkSteps(steps)
+    
+    // Efter alla steg är klara
     setTimeout(() => {
-      setIsLoading(false)
-      alert(`Bra! Du vill ha en saga om: "${userInput}"`)
-    }, 2000)
+      setIsWorking(false)
+      alert(`Saga klar! Om: "${userInput}"`)
+    }, 12000) // Total tid för alla steg
   }
 
   return (
@@ -27,7 +40,12 @@ function App() {
         <div className="content">
           <InputArea 
             onSubmit={handleCreateStory}
-            isLoading={isLoading}
+            isLoading={isWorking}
+          />
+          
+          <WorkArea 
+            isWorking={isWorking}
+            workSteps={workSteps}
           />
         </div>
       </main>
