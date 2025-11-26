@@ -46,3 +46,43 @@
   color: white;
   opacity: 0.8;
 }
+
+.status-display {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fff4e6 0%, #ffe7cc 100%);
+  border-radius: 10px;
+  border-left: 4px solid #ff9800;
+}
+
+.status-display p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.story-preview {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.story-preview h2 {
+  margin-top: 0;
+  color: #667eea;
+}
+
+.story-preview details {
+  margin-top: 1rem;
+}
+
+.story-preview summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #764ba2;
+}
+
+.story-preview summary:hover {
+  text-decoration: underline;
+}
