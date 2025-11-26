@@ -63,10 +63,17 @@ function WorkArea({ isWorking, workSteps }) {
       setActiveTask(step.taskId)
       
       // Flytta agent till task
-      setAgentPositions(prev => ({
-        ...prev,
-        [step.agentId]: taskBox.position
-      }))
+    // Hitta agent index för offset
+    const agentIndex = AGENTS.findIndex(a => a.id === step.agentId)
+    const offset = agentIndex * 25 // 25px mellan varje agent
+
+    setAgentPositions(prev => ({
+    ...prev,
+    [step.agentId]: {
+        x: taskBox.position.x - 30 + offset,
+        y: taskBox.position.y
+    }
+    }))
       
       // Sätt agent som working
       setAgentStatuses(prev => ({

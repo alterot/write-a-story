@@ -13,12 +13,16 @@ function App() {
     
     // Simulera ett arbetsflöde
     const steps = [
-      { agentId: 'stella', taskId: 'planning', duration: 2000 },
-      { agentId: 'luna', taskId: 'writing', duration: 3000 },
-      { agentId: 'pixel', taskId: 'drawing', duration: 3000 },
-      { agentId: 'nova', taskId: 'reviewing', duration: 2000 },
-      { agentId: 'stella', taskId: 'done', duration: 1000 }
-    ]
+    { agentId: 'stella', taskId: 'planning', duration: 2000 },
+    { agentId: 'luna', taskId: 'writing', duration: 3000 },
+    { agentId: 'pixel', taskId: 'drawing', duration: 3000 },
+    { agentId: 'nova', taskId: 'reviewing', duration: 2000 },
+    // ALLA går till done!
+    { agentId: 'stella', taskId: 'done', duration: 500 },
+    { agentId: 'luna', taskId: 'done', duration: 500 },
+    { agentId: 'pixel', taskId: 'done', duration: 500 },
+    { agentId: 'nova', taskId: 'done', duration: 500 }
+  ]
     
     setWorkSteps(steps)
     
