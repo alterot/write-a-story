@@ -62,9 +62,10 @@ async function planStory(userInput) {
   const prompt = `Skapa en saga-plan baserat på detta önskemål: "${userInput}"`;
   const response = await callClaude(AGENTS.orchestrator.systemPrompt, prompt);
   
-  try {
-    const plan = JSON.parse(response);
-    
+    try {
+      const cleaned = response.replace(/```json\n?|```/g, '').trim();
+      const plan = JSON.parse(cleaned);
+        
     // Kolla om innehållet var olämpligt
     if (plan.isSafe === false) {
       return {
@@ -104,11 +105,12 @@ Kom ihåg: 2-4 enkla meningar för barn 5-8 år.`;
   const response = await callClaude(AGENTS.storyteller.systemPrompt, prompt);
   
   try {
-    const parsed = JSON.parse(response);
+    const cleaned = response.replace(/```json\n?|```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
     return parsed.text;
   } catch (e) {
-  console.error('Parse error:', e);
-    return response.replace(/^```json\n?|```$/g, '').trim();
+    console.error('Parse error:', e);
+    return response.replace(/```json\n?|```/g, '').trim();
   }
 }
 
@@ -117,13 +119,14 @@ async function createIllustration(sceneDescription) {
   const response = await callClaude(AGENTS.illustrator.systemPrompt, prompt);
   
   try {
-    const parsed = JSON.parse(response);
+    const cleaned = response.replace(/```json\n?|```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
     return {
       html: parsed.html || '',
       css: parsed.css || ''
     };
   } catch (e) {
-  console.error('Parse error:', e);
+    console.error('Parse error:', e);
     return {
       html: '<div class="illustration-placeholder">🎨</div>',
       css: '.illustration-placeholder { font-size: 4rem; text-align: center; }'
@@ -142,9 +145,10 @@ Första kapitlet: ${story.chapters[0]?.text}
   const response = await callClaude(AGENTS.reviewer.systemPrompt, prompt);
   
   try {
-    return JSON.parse(response);
+    const cleaned = response.replace(/```json\n?|```/g, '').trim();
+    return JSON.parse(cleaned);
   } catch (e) {
-  console.error('Parse error:', e);
+    console.error('Parse error:', e);
     return {
       approved: true,
       feedback: 'Looks good!',
