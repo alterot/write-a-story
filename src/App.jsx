@@ -8,10 +8,10 @@ import SafetyMessage from './components/SafetyMessage'
 function App() {
   const [isWorking, setIsWorking] = useState(false)
   const [workSteps, setWorkSteps] = useState([])
-  const [currentStatus, setCurrentStatus] = useState('')
   const [story, setStory] = useState(null)
   const [showSafetyMessage, setShowSafetyMessage] = useState(false)
   const [safetyData, setSafetyData] = useState(null)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const handleSelectSuggestion = (suggestion) => {
   setShowSafetyMessage(false)
@@ -40,17 +40,16 @@ function App() {
         bubble: eventData.bubble
       }]);
       
-      if (eventData.toTask === 'done') {
-        setTimeout(() => {
-          alert('Saga klar!')
-        }, 26000); // Längre tid nu med alla pauser
-      }
+    if (eventData.toTask === 'done' && eventData.agentId === 'stella') {
+      setTimeout(() => {
+        setShowSuccess(true);
+      }, 4000);
+    }
     }
     
     if (eventType === 'agent:bubble') {
-      setCurrentStatus(eventData.bubble); // För status-rutan
       
-      // ✨ NYTT: Lägg även till i workSteps så agent-bubblan uppdateras!
+      //Lägg även till i workSteps så agent-bubblan uppdateras!
       setWorkSteps(prev => [...prev, {
         agentId: eventData.agentId,
         taskId: null, // Ingen förflyttning
@@ -95,12 +94,6 @@ function App() {
           isLoading={isWorking}
         />
         
-        {currentStatus && (
-          <div className="status-display">
-            <p>💬 {currentStatus}</p>
-          </div>
-        )}
-        
         <WorkArea 
           isWorking={isWorking}
           workSteps={workSteps}
@@ -116,7 +109,28 @@ function App() {
             </details>
           </div>
         )}
-
+        {showSuccess && story && (
+          <div className="success-overlay">
+            <div className="success-card">
+              <h2>🎉 Sagan är klar!</h2>
+              <h3>{story.title}</h3>
+              <p>{story.chapters.length} kapitel</p>
+              <div className="success-buttons">
+                <button onClick={() => {
+                  setShowSuccess(false);
+                  // TODO: Öppna BookReader här senare
+                }}>
+                  📖 Läs sagan
+                </button>
+                <button onClick={() => {
+                  window.location.reload();
+                }}>
+                  ✨ Skapa ny saga
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {/* ✅ SafetyMessage ska vara HÄR, UTANFÖR alla andra villkor */}
         {showSafetyMessage && safetyData && (
           <SafetyMessage

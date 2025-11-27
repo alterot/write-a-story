@@ -67,10 +67,8 @@ export async function createStory(userInput, onProgress) {
             : `✏️ Fixar kapitel ${i + 1} efter Novas tips...`
         });
 
-
         // GLÖM EJ PORT PIXEL SEN!!! (ILLUSTRATÖR)
 
-        
         // Paus så man ser Luna flytta sig
         await new Promise(resolve => setTimeout(resolve, 800));
         
@@ -140,26 +138,40 @@ export async function createStory(userInput, onProgress) {
       }
     }
 
-    // Alla kapitel klara!
-    onProgress?.('agent:bubble', {
-      agentId: 'nova',
-      bubble: '🎉 Alla kapitel godkända!'
-    });
+        // Alla kapitel klara!
+        onProgress?.('agent:bubble', {
+          agentId: 'nova',
+          bubble: '🎉 Alla kapitel godkända!'
+        });
 
-    // Dramatisk paus innan finale
-    await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Stella avslutar
-    onProgress?.('agent:move', {
-      agentId: 'stella',
-      toTask: 'done',
-      bubble: '✨ Sagan är klar!'
-    });
+        // Alla agents går till done-rutan för att fira!
+        onProgress?.('agent:move', {
+          agentId: 'luna',
+          toTask: 'done',
+          bubble: '📖 Kapitel skrivna!'
+        });
 
-    // Liten paus innan return så alerten kommer efter animationen
-    await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 400));
 
-    return story;
+        onProgress?.('agent:move', {
+          agentId: 'nova',
+          toTask: 'done',
+          bubble: '⭐ Granskning klar!'
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 400));
+
+        onProgress?.('agent:move', {
+          agentId: 'stella',
+          toTask: 'done',
+          bubble: '✨ Sagan är klar!'
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        return story;
 
   } catch (error) {
     console.error('Error creating story:', error);
