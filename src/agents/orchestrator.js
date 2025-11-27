@@ -61,13 +61,15 @@ export async function createStory(userInput, onProgress) {
         // Luna skriver (eller skriver om)
         onProgress?.('agent:move', {
           agentId: 'luna',
-          toTask: 'writing',
+          toTask: 'working',
           bubble: attempts === 1 
             ? `📖 Skriver kapitel ${i + 1}...`
             : `✏️ Fixar kapitel ${i + 1} efter Novas tips...`
         });
 
         // GLÖM EJ PORT PIXEL SEN!!! (ILLUSTRATÖR)
+        //WORKING
+        // ÅTGÄRDAR?
 
         // Paus så man ser Luna flytta sig
         await new Promise(resolve => setTimeout(resolve, 800));

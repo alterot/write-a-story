@@ -12,6 +12,11 @@ function AgentAvatar({ name, type, color, position, status, bubble }) {
     }
   }
 
+  const getBubbleClass = () => {
+    if (type === 'regissör') return 'bubble-right';
+    return 'bubble-left';
+};
+
   return (
     <div 
       className={`agent-avatar ${status}`}
@@ -38,7 +43,7 @@ function AgentAvatar({ name, type, color, position, status, bubble }) {
       
       {/* Speech bubble */}
       {bubble && (
-        <div className="speech-bubble">
+        <div className={`speech-bubble ${getBubbleClass()}`}>
           {bubble}
         </div>
       )}

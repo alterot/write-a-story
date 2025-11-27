@@ -13,12 +13,11 @@ const AGENTS = [
 
 // Task boxes (aktivitetsrutor)
 const TASK_BOXES = [
-  { id: 'start', title: 'Start', emoji: '🏠', position: { x: 400, y: 50 } },
-  { id: 'planning', title: 'Planerar', emoji: '📋', position: { x: 400, y: 150 } },
-  { id: 'writing', title: 'Skriver saga', emoji: '✍️', position: { x: 100, y: 300 } },
-  { id: 'drawing', title: 'Skapar bilder', emoji: '🎨', position: { x: 400, y: 300 } },
-  { id: 'reviewing', title: 'Granskar', emoji: '👀', position: { x: 700, y: 300 } },
-  { id: 'done', title: 'Färdig!', emoji: '✅', position: { x: 400, y: 450 } }
+  { id: 'start', title: 'Start', emoji: '🏠', position: { x: 400, y: 60 } },
+  { id: 'planning', title: 'Planerar', emoji: '📋', position: { x: 400, y: 180 } },
+  { id: 'working', title: 'Skapar', emoji: '⚡', position: { x: 150, y: 320 } },
+  { id: 'reviewing', title: 'Granskar', emoji: '👀', position: { x: 650, y: 320 } },
+  { id: 'done', title: 'Klar!', emoji: '🎉', position: { x: 400, y: 480 } }
 ]
 
 function WorkArea({ isWorking, workSteps }) {
@@ -35,7 +34,7 @@ function WorkArea({ isWorking, workSteps }) {
     
     AGENTS.forEach((agent, index) => {
       initialPositions[agent.id] = {
-        x: startPos.x - 30 + (index * 20), // Lite offset så de inte överlappar
+        x: startPos.x - 60 + (index * 40), // Lite offset så de inte överlappar
         y: startPos.y
       }
       initialStatuses[agent.id] = 'idle'

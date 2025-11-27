@@ -1,26 +1,26 @@
 .task-box {
   position: absolute;
-  width: 120px;
-  padding: 1rem;
+  width: 180px; 
+  padding: 2rem 1.5rem;
   background: white;
   border: 3px solid #ddd;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem; 
   transition: all 0.3s ease;
 }
 
 .task-emoji {
-  font-size: 2rem;
+  font-size: 3rem;
   line-height: 1;
 }
 
 .task-title {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   color: #333;
   text-align: center;
 }

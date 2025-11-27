@@ -86,6 +86,71 @@ function App() {
         <h1>🌟 Saga-Boken</h1>
         <p>Skapa magiska sagor tillsammans med AI-agenter!</p>
       </header>
+      <div className="agent-legend">
+      <div className="legend-agent">
+        <div className="legend-avatar-box" style={{ backgroundColor: '#FFD700', borderColor: 'black' }}>
+          <div className="legend-avatar-face">
+            <div className="legend-avatar-eyes">
+              <span className="legend-eye"></span>
+              <span className="legend-eye"></span>
+            </div>
+            <div className="legend-avatar-emoji">🎭</div>
+          </div>
+        </div>
+        <div className="legend-info">
+          <div className="legend-name">Stella</div>
+          <div className="legend-role">Dirigent</div>
+        </div>
+      </div>
+
+      <div className="legend-agent">
+        <div className="legend-avatar-box" style={{ backgroundColor: '#FF6B9D', borderColor: 'black' }}>
+          <div className="legend-avatar-face">
+            <div className="legend-avatar-eyes">
+              <span className="legend-eye"></span>
+              <span className="legend-eye"></span>
+            </div>
+            <div className="legend-avatar-emoji">📖</div>
+          </div>
+        </div>
+        <div className="legend-info">
+          <div className="legend-name">Luna</div>
+          <div className="legend-role">Berättare</div>
+        </div>
+      </div>
+
+      <div className="legend-agent">
+        <div className="legend-avatar-box" style={{ backgroundColor: '#4ECDC4', borderColor: 'black' }}>
+          <div className="legend-avatar-face">
+            <div className="legend-avatar-eyes">
+              <span className="legend-eye"></span>
+              <span className="legend-eye"></span>
+            </div>
+            <div className="legend-avatar-emoji">🎨</div>
+          </div>
+        </div>
+        <div className="legend-info">
+          <div className="legend-name">Pixel</div>
+          <div className="legend-role">Illustratör</div>
+        </div>
+      </div>
+
+      <div className="legend-agent">
+        <div className="legend-avatar-box" style={{ backgroundColor: '#A78BFA', borderColor: 'black' }}>
+          <div className="legend-avatar-face">
+            <div className="legend-avatar-eyes">
+              <span className="legend-eye"></span>
+              <span className="legend-eye"></span>
+            </div>
+            <div className="legend-avatar-emoji">⭐</div>
+          </div>
+        </div>
+        <div className="legend-info">
+          <div className="legend-name">Nova</div>
+          <div className="legend-role">Granskare</div>
+        </div>
+      </div>
+    </div>
 
      <main className="app-main">
       <div className="content">

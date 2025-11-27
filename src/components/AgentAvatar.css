@@ -165,3 +165,22 @@
     opacity: 1;
   }
 }
+
+/* Default - centrerad ovanför */
+.speech-bubble {
+  position: absolute;
+  top: -60px;
+  /* ... resten */
+}
+
+/* Nova - bubbla till höger */
+.speech-bubble.bubble-right {
+  left: 70px; /* Till höger om agent */
+  top: 0; /* I höjd med agent */
+}
+
+/* Andra - bubbla till vänster */
+.speech-bubble.bubble-left {
+  right: 70px; /* Till vänster om agent */
+  top: 0;
+}
