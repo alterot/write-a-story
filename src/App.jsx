@@ -30,27 +30,35 @@ function App() {
     setStory(null)
     setWorkSteps([])
 
-    const progressCallback = (stage, message) => {
-      setCurrentStatus(message)
+    const progressCallback = (eventType, eventData) => {
+      console.log('📢 Event:', eventType, eventData); // Debug!
       
-      const agentMap = {
-        'planning': { agentId: 'stella', taskId: 'planning' },
-        'writing': { agentId: 'luna', taskId: 'writing' },
-        'illustrating': { agentId: 'pixel', taskId: 'drawing' },
-        'reviewing': { agentId: 'nova', taskId: 'reviewing' },
-        'done': { agentId: 'stella', taskId: 'done' }
+      if (eventType === 'agent:move') {
+        // Agent flyttar till ny ruta
+        setWorkSteps(prev => [...prev, {
+          agentId: eventData.agentId,
+          taskId: eventData.toTask,
+          bubble: eventData.bubble
+        }]);
+        
+        // Om vi är klara, visa alert efter animation
+        if (eventData.toTask === 'done') {
+          setTimeout(() => {
+            alert('Saga klar!')
+          }, 2000);
+        }
       }
-
-      const step = agentMap[stage]
-      if (step) {
-        setWorkSteps(prev => [...prev, step])
+      
+      if (eventType === 'agent:bubble') {
+        // Uppdatera bubbla utan förflyttning
+        setCurrentStatus(eventData.bubble);
       }
     }
 
     try {
       const result = await createStory(userInput, progressCallback)
       
-      // ⚠️ NYTT: Kolla om innehållet var olämpligt
+      //Kolla om innehållet var olämpligt
       if (result.unsafe) {
         setSafetyData(result)
         setShowSafetyMessage(true)
@@ -60,13 +68,6 @@ function App() {
       
       setStory(result)
       console.log('Saga klar!', result)
-      
-      setTimeout(() => {
-        alert(`Saga klar! Titel: "${result.title}"
-${result.chapters.length} kapitel skapade!
-
-(I nästa steg lägger vi till bok-läsaren!)`)
-      }, 1000)
       
     } catch (error) {
       console.error('Fel vid skapande:', error)

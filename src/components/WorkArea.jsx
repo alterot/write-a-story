@@ -24,6 +24,7 @@ const TASK_BOXES = [
 function WorkArea({ isWorking, workSteps }) {
   const [agentPositions, setAgentPositions] = useState({})
   const [agentStatuses, setAgentStatuses] = useState({})
+  const [agentBubbles, setAgentBubbles] = useState({})  
   const [activeTask, setActiveTask] = useState(null)
 
   // Sätt alla agenter till START-positionen i början
@@ -81,6 +82,13 @@ function WorkArea({ isWorking, workSteps }) {
         [step.agentId]: 'working'
       }))
 
+      if (step.bubble) {
+        setAgentBubbles(prev => ({
+          ...prev,
+          [step.agentId]: step.bubble
+        }));
+      }
+
       // Vänta en stund, sen nästa steg
       setTimeout(() => {
         setAgentStatuses(prev => ({
@@ -120,6 +128,7 @@ function WorkArea({ isWorking, workSteps }) {
             color={agent.color}
             position={agentPositions[agent.id] || { x: 0, y: 0 }}
             status={agentStatuses[agent.id] || 'idle'}
+            bubble={agentBubbles[agent.id]}
           />
         ))}
       </div>

@@ -1,6 +1,6 @@
 import './AgentAvatar.css'
 
-function AgentAvatar({ name, type, color, position, status }) {
+function AgentAvatar({ name, type, color, position, status, bubble }) {
   // Olika emojis baserat på agent-typ
   const getEmoji = () => {
     switch(type) {
@@ -34,6 +34,13 @@ function AgentAvatar({ name, type, color, position, status }) {
       <div className="avatar-name">{name}</div>
       {status === 'working' && (
         <div className="working-indicator">💭</div>
+      )}
+      
+      {/* Speech bubble */}
+      {bubble && (
+        <div className="speech-bubble">
+          {bubble}
+        </div>
       )}
     </div>
   )

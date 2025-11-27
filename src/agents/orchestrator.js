@@ -8,7 +8,11 @@ export async function createStory(userInput, onProgress) {
   };
 
   try {
-    onProgress?.('planning', 'Stella planerar sagan...');
+    onProgress?.('agent:move', {
+      agentId: 'stella',
+      toTask: 'planning',
+      bubble: '📋 Planerar sagan...'
+    });
     const plan = await planStory(userInput);
     
     // ⚠️ NYTT: Kolla om innehållet var olämpligt
@@ -30,27 +34,74 @@ export async function createStory(userInput, onProgress) {
       illustration: { html: '', css: '' }
     }));
 
-    for (let i = 0; i < story.chapters.length; i++) {
-      const chapter = story.chapters[i];
-      
-      onProgress?.('writing', `Luna skriver kapitel ${i + 1}...`, i);
-      const text = await writeChapter(chapter.description, story.title);
-      chapter.text = text;
+// Nova går till reviewing och väntar
+onProgress?.('agent:move', {
+  agentId: 'nova',
+  toTask: 'reviewing',
+  bubble: '⏳ Redo att granska...'
+});
 
-      onProgress?.('illustrating', `Pixel ritar kapitel ${i + 1}...`, i);
-      const illustration = await createIllustration(chapter.scene);
-      chapter.illustration = illustration;
-    }
+for (let i = 0; i < story.chapters.length; i++) {
+  const chapter = story.chapters[i];
+  
+  // Luna skriver
+  onProgress?.('agent:move', {
+    agentId: 'luna',
+    toTask: 'writing',
+    bubble: `📖 Skriver kapitel ${i + 1}...`
+  });
+  const text = await writeChapter(chapter.description, story.title);
+  chapter.text = text;
 
-    onProgress?.('reviewing', 'Nova granskar sagan...');
-    const review = await reviewStory(story);
-    
-    if (!review.approved && review.suggestions.length > 0) {
-      onProgress?.('revising', 'Justerar sagan...');
-    }
+  // Luna går till Nova med texten
+  onProgress?.('agent:move', {
+    agentId: 'luna',
+    toTask: 'reviewing',
+    bubble: `✅ Kapitel ${i + 1} skrivet!`
+  });
 
-    onProgress?.('done', 'Sagan är klar!');
-    return story;
+// TA BORT TEMPORÄRT FÖR ATT SPARA TOKENS
+
+  // Pixel ritar
+/*   onProgress?.('agent:move', {
+    agentId: 'pixel',
+    toTask: 'drawing',
+    bubble: `🎨 Ritar kapitel ${i + 1}...`
+  });
+  const illustration = await createIllustration(chapter.scene);
+  chapter.illustration = illustration;
+
+  // Pixel går till Nova med bilden
+  onProgress?.('agent:move', {
+    agentId: 'pixel',
+    toTask: 'reviewing',
+    bubble: `✅ Illustration ${i + 1} klar!`
+  }); */
+}
+
+// EFTER loopen - Nova granskar allt
+onProgress?.('agent:bubble', {
+  agentId: 'nova',
+  bubble: '👀 Granskar hela sagan...'
+});
+
+const review = await reviewStory(story);
+
+if (!review.approved && review.suggestions.length > 0) {
+  onProgress?.('agent:bubble', {
+    agentId: 'nova',
+    bubble: '💭 Behöver justeringar...'
+  });
+  // TODO: Iteration kommer här!
+}
+
+onProgress?.('agent:move', {
+  agentId: 'stella',
+  toTask: 'done',
+  bubble: '✨ Sagan är klar!'
+});
+
+return story;
 
   } catch (error) {
     console.error('Error creating story:', error);
