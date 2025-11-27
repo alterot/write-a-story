@@ -36,9 +36,6 @@ function AgentAvatar({ name, type, color, position, status, bubble }) {
           <div className="avatar-emoji">{getEmoji()}</div>
         </div>
       </div>
-      {status === 'working' && (
-        <div className="working-indicator">💭</div>
-      )}
       
       {/* Speech bubble */}
       {bubble && (
