@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import AgentAvatar from './AgentAvatar'
 import TaskBox from './TaskBox'
 import './WorkArea.css'
@@ -46,63 +46,57 @@ function WorkArea({ isWorking, workSteps }) {
   }, [])
 
   // Simulera arbetsflöde när isWorking är true
-  useEffect(() => {
-    if (!isWorking || !workSteps || workSteps.length === 0) return
+const executingRef = useRef(false);
 
-    let stepIndex = 0
-    const executeStep = () => {
-      if (stepIndex >= workSteps.length) {
-        // Alla steg klara!
-        setActiveTask(null)
-        return
-      }
-
-      const step = workSteps[stepIndex]
-      const taskBox = TASK_BOXES.find(box => box.id === step.taskId)
-      
-      // Sätt active task
-      setActiveTask(step.taskId)
-      
-      // Flytta agent till task
-      // Hitta agent index för offset
-      const agentIndex = AGENTS.findIndex(a => a.id === step.agentId)
-      const offset = agentIndex * 25 // 25px mellan varje agent
-
-      setAgentPositions(prev => ({
-      ...prev,
-      [step.agentId]: {
-          x: taskBox.position.x - 30 + offset,
-          y: taskBox.position.y
-      }
-      }))
-      
-      // Sätt agent som working
-      setAgentStatuses(prev => ({
-        ...prev,
-        [step.agentId]: 'working'
-      }))
-
-      if (step.bubble) {
-        setAgentBubbles(prev => ({
-          ...prev,
-          [step.agentId]: step.bubble
-        }));
-      }
-
-      // Vänta en stund, sen nästa steg
-      setTimeout(() => {
-        setAgentStatuses(prev => ({
-          ...prev,
-          [step.agentId]: 'done'
-        }))
-        
-        stepIndex++
-        setTimeout(executeStep, 500)
-      }, step.duration || 2000)
+useEffect(() => {
+  if (!isWorking || !workSteps || workSteps.length === 0) return;
+  if (executingRef.current) return;
+  
+  executingRef.current = true;
+  let stepIndex = 0;
+  
+  const executeStep = () => {
+    if (stepIndex >= workSteps.length) {
+      setActiveTask(null);
+      executingRef.current = false;
+      return;
     }
 
-    executeStep()
-  }, [isWorking, workSteps])
+    const step = workSteps[stepIndex];
+    const taskBox = TASK_BOXES.find(box => box.id === step.taskId);
+    
+    setActiveTask(step.taskId);
+    
+    const agentIndex = AGENTS.findIndex(a => a.id === step.agentId);
+    const offset = agentIndex * 25;
+
+    setAgentPositions(prev => ({
+      ...prev,
+      [step.agentId]: {
+        x: taskBox.position.x - 30 + offset,
+        y: taskBox.position.y
+      }
+    }));
+    
+    setAgentStatuses(prev => ({
+      ...prev,
+      [step.agentId]: 'working'
+    }));
+
+    if (step.bubble) {
+      setAgentBubbles(prev => ({
+        ...prev,
+        [step.agentId]: step.bubble
+      }));
+    }
+
+    // Nästa steg direkt (orchestrator äger timingen!)
+    stepIndex++;
+    executeStep();
+  };
+
+  executeStep();
+}, [isWorking, workSteps]);
 
   return (
     <div className="work-area">

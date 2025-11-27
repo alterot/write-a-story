@@ -30,31 +30,28 @@ function App() {
     setStory(null)
     setWorkSteps([])
 
-    const progressCallback = (eventType, eventData) => {
-      console.log('📢 Event:', eventType, eventData); // Debug!
+  const progressCallback = (eventType, eventData) => {
+    console.log('📢 Event:', eventType, eventData);
+    
+    if (eventType === 'agent:move') {
+      setWorkSteps(prev => [...prev, {
+        agentId: eventData.agentId,
+        taskId: eventData.toTask,
+        bubble: eventData.bubble
+      }]);
       
-      if (eventType === 'agent:move') {
-        // Agent flyttar till ny ruta
-        setWorkSteps(prev => [...prev, {
-          agentId: eventData.agentId,
-          taskId: eventData.toTask,
-          bubble: eventData.bubble
-        }]);
-        
-        // Om vi är klara, visa alert efter animation
-        if (eventData.toTask === 'done') {
-          setTimeout(() => {
-            alert('Saga klar!')
-          }, 2000);
-        }
-      }
-      
-      if (eventType === 'agent:bubble') {
-        // Uppdatera bubbla utan förflyttning
-        setCurrentStatus(eventData.bubble);
+      if (eventData.toTask === 'done') {
+        setTimeout(() => {
+          alert('Saga klar!')
+        }, 26000); // Längre tid nu med alla pauser
       }
     }
-
+    
+    if (eventType === 'agent:bubble') {
+      // Bara uppdatera bubblan direkt, skippa workSteps
+      setCurrentStatus(eventData.bubble);
+    }
+  }
     try {
       const result = await createStory(userInput, progressCallback)
       

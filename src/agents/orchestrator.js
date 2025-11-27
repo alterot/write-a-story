@@ -8,14 +8,15 @@ export async function createStory(userInput, onProgress) {
   };
 
   try {
+    // Stella planerar
     onProgress?.('agent:move', {
       agentId: 'stella',
       toTask: 'planning',
       bubble: '📋 Planerar sagan...'
     });
-    const plan = await planStory(userInput);
+    const plan = await planStory(userInput); // API väntar här naturligt
     
-    // ⚠️ NYTT: Kolla om innehållet var olämpligt
+    // Kolla om innehållet var olämpligt
     if (plan.unsafe) {
       return {
         unsafe: true,
@@ -34,74 +35,131 @@ export async function createStory(userInput, onProgress) {
       illustration: { html: '', css: '' }
     }));
 
-// Nova går till reviewing och väntar
-onProgress?.('agent:move', {
-  agentId: 'nova',
-  toTask: 'reviewing',
-  bubble: '⏳ Redo att granska...'
-});
+    // Paus efter planering
+    await new Promise(resolve => setTimeout(resolve, 1200));
 
-for (let i = 0; i < story.chapters.length; i++) {
-  const chapter = story.chapters[i];
-  
-  // Luna skriver
-  onProgress?.('agent:move', {
-    agentId: 'luna',
-    toTask: 'writing',
-    bubble: `📖 Skriver kapitel ${i + 1}...`
-  });
-  const text = await writeChapter(chapter.description, story.title);
-  chapter.text = text;
+    // Nova går till reviewing och väntar
+    onProgress?.('agent:move', {
+      agentId: 'nova',
+      toTask: 'reviewing',
+      bubble: '⏳ Redo att granska...'
+    });
 
-  // Luna går till Nova med texten
-  onProgress?.('agent:move', {
-    agentId: 'luna',
-    toTask: 'reviewing',
-    bubble: `✅ Kapitel ${i + 1} skrivet!`
-  });
+    // Paus så Nova hinner "sätta sig"
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-// TA BORT TEMPORÄRT FÖR ATT SPARA TOKENS
+    // KAPITEL-LOOP MED ITERATION
+    for (let i = 0; i < story.chapters.length; i++) {
+      const chapter = story.chapters[i];
+      let approved = false;
+      let attempts = 0;
+      const maxAttempts = 2;
+      
+      while (!approved && attempts < maxAttempts) {
+        attempts++;
+        
+        // Luna skriver (eller skriver om)
+        onProgress?.('agent:move', {
+          agentId: 'luna',
+          toTask: 'writing',
+          bubble: attempts === 1 
+            ? `📖 Skriver kapitel ${i + 1}...`
+            : `✏️ Fixar kapitel ${i + 1} efter Novas tips...`
+        });
 
-  // Pixel ritar
-/*   onProgress?.('agent:move', {
-    agentId: 'pixel',
-    toTask: 'drawing',
-    bubble: `🎨 Ritar kapitel ${i + 1}...`
-  });
-  const illustration = await createIllustration(chapter.scene);
-  chapter.illustration = illustration;
 
-  // Pixel går till Nova med bilden
-  onProgress?.('agent:move', {
-    agentId: 'pixel',
-    toTask: 'reviewing',
-    bubble: `✅ Illustration ${i + 1} klar!`
-  }); */
-}
+        // GLÖM EJ PORT PIXEL SEN!!! (ILLUSTRATÖR)
 
-// EFTER loopen - Nova granskar allt
-onProgress?.('agent:bubble', {
-  agentId: 'nova',
-  bubble: '👀 Granskar hela sagan...'
-});
+        
+        // Paus så man ser Luna flytta sig
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        const text = await writeChapter(
+          chapter.description, 
+          story.title,
+          attempts > 1 ? 'Gör texten mer engagerande och barnvänlig' : null
+        ); // API väntar här naturligt
+        chapter.text = text;
 
-const review = await reviewStory(story);
+        // Luna går till Nova med texten
+        onProgress?.('agent:move', {
+          agentId: 'luna',
+          toTask: 'reviewing',
+          bubble: `✅ Kapitel ${i + 1} ${attempts > 1 ? 'omskrivet' : 'skrivet'}!`
+        });
+        
+        // Paus så man ser Luna lämna texten
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Nova granskar kapitlet
+        onProgress?.('agent:bubble', {
+          agentId: 'nova',
+          bubble: `👀 Läser kapitel ${i + 1}...`
+        });
+        
+        // Längre paus - man ska hinna läsa att Nova läser!
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        const review = await reviewChapter(chapter, i + 1); // API väntar här naturligt
+        
+        if (review.approved) {
+          approved = true;
+          onProgress?.('agent:bubble', {
+            agentId: 'nova',
+            bubble: `✅ Kapitel ${i + 1} godkänt!`
+          });
+          // Paus så man ser godkännandet
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+        } else {
+          // Nova ger feedback
+          onProgress?.('agent:bubble', {
+            agentId: 'nova',
+            bubble: `💭 Kapitel ${i + 1} behöver förbättras...`
+          });
+          // Längre paus - viktigt meddelande!
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Luna svarar
+          onProgress?.('agent:bubble', {
+            agentId: 'luna',
+            bubble: `🔄 Okej, jag fixar det!`
+          });
+          // Paus för Lunas reaktion
+          await new Promise(resolve => setTimeout(resolve, 1200));
+        }
+      }
+      
+      // Om vi nått max attempts, godkänn ändå
+      if (!approved) {
+        onProgress?.('agent:bubble', {
+          agentId: 'nova',
+          bubble: `✅ Kapitel ${i + 1} godkänt (efter ${attempts} försök)`
+        });
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+    }
 
-if (!review.approved && review.suggestions.length > 0) {
-  onProgress?.('agent:bubble', {
-    agentId: 'nova',
-    bubble: '💭 Behöver justeringar...'
-  });
-  // TODO: Iteration kommer här!
-}
+    // Alla kapitel klara!
+    onProgress?.('agent:bubble', {
+      agentId: 'nova',
+      bubble: '🎉 Alla kapitel godkända!'
+    });
 
-onProgress?.('agent:move', {
-  agentId: 'stella',
-  toTask: 'done',
-  bubble: '✨ Sagan är klar!'
-});
+    // Dramatisk paus innan finale
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-return story;
+    // Stella avslutar
+    onProgress?.('agent:move', {
+      agentId: 'stella',
+      toTask: 'done',
+      bubble: '✨ Sagan är klar!'
+    });
+
+    // Liten paus innan return så alerten kommer efter animationen
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    return story;
 
   } catch (error) {
     console.error('Error creating story:', error);
@@ -185,24 +243,33 @@ async function createIllustration(sceneDescription) {
   }
 }
 
-async function reviewStory(story) {
-  const prompt = `Granska denna saga:
-Titel: ${story.title}
-Antal kapitel: ${story.chapters.length}
-Första kapitlet: ${story.chapters[0]?.text}
+async function reviewChapter(chapter, chapterNumber) {
+  const prompt = `Granska detta kapitel från en barnsaga:
 
-Är den lämplig för barn 5-8 år?`;
+Kapitel ${chapterNumber}: ${chapter.text}
+
+Är det lämpligt för barn 5-8 år? Är språket enkelt nog? Är det engagerande?
+
+Svara ENDAST med JSON:
+{
+  "approved": true/false,
+  "feedback": "kort feedback",
+  "suggestions": ["förslag 1", "förslag 2"]
+}`;
 
   const response = await callClaude(AGENTS.reviewer.systemPrompt, prompt);
   
   try {
-    const cleaned = response.replace(/```json\n?|```/g, '').trim();
-    return JSON.parse(cleaned);
+    const jsonMatch = response.match(/\{[\s\S]*?\}/);
+    if (jsonMatch) {
+      return JSON.parse(jsonMatch[0]);
+    }
+    throw new Error('No JSON found');
   } catch (e) {
     console.error('Parse error:', e);
     return {
       approved: true,
-      feedback: 'Looks good!',
+      feedback: 'Parse error - defaulting to approved',
       suggestions: []
     };
   }
