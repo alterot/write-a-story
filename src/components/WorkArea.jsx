@@ -14,15 +14,15 @@ const AGENTS = [
 // Task boxes (aktivitetsrutor)
 const TASK_BOXES = [
   // Rad 1: Start + Planerar
-  { id: 'start', title: 'Start', emoji: '🏠', position: { x: 250, y: 25 } },
-  { id: 'planning', title: 'Planerar', emoji: '📋', position: { x: 550, y: 25 } },
+  { id: 'start', title: 'Start', emoji: '🏠', position: { x: 275, y: 25 } },
+  { id: 'planning', title: 'Planerar', emoji: '📋', position: { x: 575, y: 25 } },
   
   // Rad 2: Skapar + Granskar
-  { id: 'working', title: 'Skapar', emoji: '⚡', position: { x: 150, y: 225 } },
-  { id: 'reviewing', title: 'Granskar', emoji: '👀', position: { x: 650, y: 225 } },
+  { id: 'working', title: 'Skapar', emoji: '⚡', position: { x: 175, y: 225 } },
+  { id: 'reviewing', title: 'Granskar', emoji: '👀', position: { x: 675, y: 225 } },
   
   // Rad 3: Klar
-  { id: 'done', title: 'Klar!', emoji: '🎉', position: { x: 400, y: 410 } }
+  { id: 'done', title: 'Klar!', emoji: '🎉', position: { x: 425, y: 410 } }
 ]
 function WorkArea({ isWorking, workSteps }) {
   const [agentPositions, setAgentPositions] = useState({})
