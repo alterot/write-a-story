@@ -63,6 +63,21 @@ useEffect(() => {
     }
 
     const step = workSteps[stepIndex];
+    
+    // Om det bara är en bubbla (ingen förflyttning)
+    if (step.bubbleOnly) {
+      if (step.bubble) {
+        setAgentBubbles(prev => ({
+          ...prev,
+          [step.agentId]: step.bubble
+        }));
+      }
+      stepIndex++;
+      executeStep();
+      return;
+    }
+    
+    // Annars normal förflyttning...
     const taskBox = TASK_BOXES.find(box => box.id === step.taskId);
     
     setActiveTask(step.taskId);

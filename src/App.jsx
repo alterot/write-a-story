@@ -48,8 +48,15 @@ function App() {
     }
     
     if (eventType === 'agent:bubble') {
-      // Bara uppdatera bubblan direkt, skippa workSteps
-      setCurrentStatus(eventData.bubble);
+      setCurrentStatus(eventData.bubble); // För status-rutan
+      
+      // ✨ NYTT: Lägg även till i workSteps så agent-bubblan uppdateras!
+      setWorkSteps(prev => [...prev, {
+        agentId: eventData.agentId,
+        taskId: null, // Ingen förflyttning
+        bubble: eventData.bubble,
+        bubbleOnly: true // Markera att det bara är bubbla
+      }]);
     }
   }
     try {
