@@ -165,13 +165,20 @@ function App() {
         />
 
         {story && (
-          <div className="story-preview">
-            <h2>✨ {story.title}</h2>
-            <p>Antal kapitel: {story.chapters.length}</p>
-            <details>
-              <summary>Visa första kapitlet</summary>
-              <p>{story.chapters[0]?.text}</p>
-            </details>
+          <div className="story-display">
+            <div className="story-header">
+              <h2>✨ {story.title}</h2>
+              <p className="chapter-count">{story.chapters.length} kapitel</p>
+            </div>
+            
+            <div className="chapters-container">
+              {story.chapters.map((chapter, index) => (
+                <div key={index} className="chapter-card">
+                  <div className="chapter-number">Kapitel {index + 1}</div>
+                  <p className="chapter-text">{chapter.text}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
         {showSuccess && story && (
@@ -183,7 +190,13 @@ function App() {
               <div className="success-buttons">
                 <button onClick={() => {
                   setShowSuccess(false);
-                  // TODO: Öppna BookReader här senare
+                  // Scrolla till sagan
+                  setTimeout(() => {
+                    document.querySelector('.story-display')?.scrollIntoView({ 
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }, 100);
                 }}>
                   📖 Läs sagan
                 </button>
