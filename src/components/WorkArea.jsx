@@ -36,13 +36,20 @@ function WorkArea({ isWorking, workSteps }) {
     const initialPositions = {}
     const initialStatuses = {}
     
-    AGENTS.forEach((agent, index) => {
-      initialPositions[agent.id] = {
-        x: startPos.x - 60 + (index * 40), // Lite offset så de inte överlappar
-        y: startPos.y
-      }
-      initialStatuses[agent.id] = 'idle'
-    })
+    const yOffsets = {
+      'stella': 0,
+      'luna': 20,
+      'pixel': 40,
+      'nova': 60
+    }
+    
+      AGENTS.forEach((agent, index) => {
+        initialPositions[agent.id] = {
+          x: startPos.x - 40 + (index * 25),
+          y: startPos.y + (yOffsets[agent.id] || 0)
+        }
+        initialStatuses[agent.id] = 'idle'
+      })
     
     setAgentPositions(initialPositions)
     setAgentStatuses(initialStatuses)
@@ -85,14 +92,18 @@ useEffect(() => {
     
     setActiveTask(step.taskId);
     
-    const agentIndex = AGENTS.findIndex(a => a.id === step.agentId);
-    const offset = agentIndex * 25;
+    const yOffsets = {
+      'stella': 0,
+      'luna': 20,
+      'pixel': 40,
+      'nova': 60
+    }
 
     setAgentPositions(prev => ({
       ...prev,
       [step.agentId]: {
-        x: taskBox.position.x - 30 + offset,
-        y: taskBox.position.y
+        x: taskBox.position.x,
+        y: taskBox.position.y + (yOffsets[step.agentId] || 0)
       }
     }));
     
