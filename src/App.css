@@ -277,3 +277,15 @@
     opacity: 1;
   }
 }
+
+.chapter-illustration {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8efff 100%);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  padding: 2rem;
+}

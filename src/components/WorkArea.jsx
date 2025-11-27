@@ -38,9 +38,9 @@ function WorkArea({ isWorking, workSteps }) {
     
     const yOffsets = {
       'stella': 0,
-      'luna': 20,
-      'pixel': 40,
-      'nova': 60
+      'luna': 25,
+      'pixel': 50,
+      'nova': 75
     }
     
       AGENTS.forEach((agent, index) => {

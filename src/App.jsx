@@ -175,6 +175,15 @@ function App() {
               {story.chapters.map((chapter, index) => (
                 <div key={index} className="chapter-card">
                   <div className="chapter-number">Kapitel {index + 1}</div>
+                  
+                  {/* Illustration */}
+                  {chapter.illustration?.html && (
+                    <div className="chapter-illustration">
+                      <style>{chapter.illustration.css}</style>
+                      <div dangerouslySetInnerHTML={{ __html: chapter.illustration.html }} />
+                    </div>
+                  )}
+                  
                   <p className="chapter-text">{chapter.text}</p>
                 </div>
               ))}

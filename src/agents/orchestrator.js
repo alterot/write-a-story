@@ -8,15 +8,13 @@ export async function createStory(userInput, onProgress) {
   };
 
   try {
-    // Stella planerar
     onProgress?.('agent:move', {
       agentId: 'stella',
       toTask: 'planning',
       bubble: '📋 Planerar sagan...'
     });
-    const plan = await planStory(userInput); // API väntar här naturligt
+    const plan = await planStory(userInput);
     
-    // Kolla om innehållet var olämpligt
     if (plan.unsafe) {
       return {
         unsafe: true,
@@ -35,20 +33,16 @@ export async function createStory(userInput, onProgress) {
       illustration: { html: '', css: '' }
     }));
 
-    // Paus efter planering
     await new Promise(resolve => setTimeout(resolve, 1200));
 
-    // Nova går till reviewing och väntar
     onProgress?.('agent:move', {
       agentId: 'nova',
       toTask: 'reviewing',
       bubble: '⏳ Redo att granska...'
     });
 
-    // Paus så Nova hinner "sätta sig"
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // KAPITEL-LOOP MED ITERATION
     for (let i = 0; i < story.chapters.length; i++) {
       const chapter = story.chapters[i];
       let approved = false;
@@ -58,7 +52,6 @@ export async function createStory(userInput, onProgress) {
       while (!approved && attempts < maxAttempts) {
         attempts++;
         
-        // Luna skriver (eller skriver om)
         onProgress?.('agent:move', {
           agentId: 'luna',
           toTask: 'working',
@@ -67,40 +60,31 @@ export async function createStory(userInput, onProgress) {
             : `✏️ Fixar kapitel ${i + 1} efter Novas tips...`
         });
 
-        // GLÖM EJ PORT PIXEL SEN!!! (ILLUSTRATÖR)
-        //WORKING
-        // ÅTGÄRDAR?
-
-        // Paus så man ser Luna flytta sig
         await new Promise(resolve => setTimeout(resolve, 800));
         
         const text = await writeChapter(
           chapter.description, 
           story.title,
           attempts > 1 ? 'Gör texten mer engagerande och barnvänlig' : null
-        ); // API väntar här naturligt
+        );
         chapter.text = text;
 
-        // Luna går till Nova med texten
         onProgress?.('agent:move', {
           agentId: 'luna',
           toTask: 'reviewing',
           bubble: `✅ Kapitel ${i + 1} ${attempts > 1 ? 'omskrivet' : 'skrivet'}!`
         });
         
-        // Paus så man ser Luna lämna texten
         await new Promise(resolve => setTimeout(resolve, 1500));
         
-        // Nova granskar kapitlet
         onProgress?.('agent:bubble', {
           agentId: 'nova',
           bubble: `👀 Läser kapitel ${i + 1}...`
         });
         
-        // Längre paus - man ska hinna läsa att Nova läser!
         await new Promise(resolve => setTimeout(resolve, 2000));
         
-        const review = await reviewChapter(chapter, i + 1); // API väntar här naturligt
+        const review = await reviewChapter(chapter, i + 1);
         
         if (review.approved) {
           approved = true;
@@ -108,29 +92,23 @@ export async function createStory(userInput, onProgress) {
             agentId: 'nova',
             bubble: `✅ Kapitel ${i + 1} godkänt!`
           });
-          // Paus så man ser godkännandet
           await new Promise(resolve => setTimeout(resolve, 1500));
           
         } else {
-          // Nova ger feedback
           onProgress?.('agent:bubble', {
             agentId: 'nova',
             bubble: `💭 Kapitel ${i + 1} behöver förbättras...`
           });
-          // Längre paus - viktigt meddelande!
           await new Promise(resolve => setTimeout(resolve, 2000));
           
-          // Luna svarar
           onProgress?.('agent:bubble', {
             agentId: 'luna',
             bubble: `🔄 Okej, jag fixar det!`
           });
-          // Paus för Lunas reaktion
           await new Promise(resolve => setTimeout(resolve, 1200));
         }
       }
       
-      // Om vi nått max attempts, godkänn ändå
       if (!approved) {
         onProgress?.('agent:bubble', {
           agentId: 'nova',
@@ -138,42 +116,68 @@ export async function createStory(userInput, onProgress) {
         });
         await new Promise(resolve => setTimeout(resolve, 1500));
       }
+
+      // Pixel ritar (ingen iteration)
+      onProgress?.('agent:move', {
+        agentId: 'pixel',
+        toTask: 'working',
+        bubble: `🎨 Ritar kapitel ${i + 1}...`
+      });
+      
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const illustration = await createIllustration(chapter.scene);
+      chapter.illustration = illustration;
+      
+      onProgress?.('agent:move', {
+        agentId: 'pixel',
+        toTask: 'reviewing',
+        bubble: `✅ Illustration ${i + 1} klar!`
+      });
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
-        // Alla kapitel klara!
-        onProgress?.('agent:bubble', {
-          agentId: 'nova',
-          bubble: '🎉 Alla kapitel godkända!'
-        });
+    onProgress?.('agent:bubble', {
+      agentId: 'nova',
+      bubble: '🎉 Alla kapitel godkända!'
+    });
 
-        await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-        // Alla agents går till done-rutan för att fira!
-        onProgress?.('agent:move', {
-          agentId: 'luna',
-          toTask: 'done',
-          bubble: '📖 Kapitel skrivna!'
-        });
+    onProgress?.('agent:move', {
+      agentId: 'luna',
+      toTask: 'done',
+      bubble: '📖 Kapitel skrivna!'
+    });
 
-        await new Promise(resolve => setTimeout(resolve, 400));
+    await new Promise(resolve => setTimeout(resolve, 400));
 
-        onProgress?.('agent:move', {
-          agentId: 'nova',
-          toTask: 'done',
-          bubble: '⭐ Granskning klar!'
-        });
+    onProgress?.('agent:move', {
+      agentId: 'pixel',
+      toTask: 'done',
+      bubble: '🎨 Illustrationer klara!'
+    });
 
-        await new Promise(resolve => setTimeout(resolve, 400));
+    await new Promise(resolve => setTimeout(resolve, 400));
 
-        onProgress?.('agent:move', {
-          agentId: 'stella',
-          toTask: 'done',
-          bubble: '✨ Sagan är klar!'
-        });
+    onProgress?.('agent:move', {
+      agentId: 'nova',
+      toTask: 'done',
+      bubble: '⭐ Granskning klar!'
+    });
 
-        await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 400));
 
-        return story;
+    onProgress?.('agent:move', {
+      agentId: 'stella',
+      toTask: 'done',
+      bubble: '✨ Sagan är klar!'
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    return story;
 
   } catch (error) {
     console.error('Error creating story:', error);
