@@ -6,22 +6,17 @@ import './WorkArea.css'
 // Agent-definitioner
 const AGENTS = [
   { id: 'stella', name: 'Stella', type: 'orchestrator', color: '#FFD700' },
+  { id: 'nova', name: 'Nova', type: 'regissör', color: '#A78BFA' },
   { id: 'luna', name: 'Luna', type: 'berättare', color: '#FF6B9D' },
-  { id: 'pixel', name: 'Pixel', type: 'illustratör', color: '#4ECDC4' },
-  { id: 'nova', name: 'Nova', type: 'regissör', color: '#A78BFA' }
+  { id: 'pixel', name: 'Pixel', type: 'illustratör', color: '#4ECDC4' }
 ]
 
 // Task boxes (aktivitetsrutor)
 const TASK_BOXES = [
-  // Rad 1: Start + Planerar
   { id: 'start', title: 'Start', emoji: '🏠', position: { x: 275, y: 25 } },
   { id: 'planning', title: 'Planerar', emoji: '📋', position: { x: 575, y: 25 } },
-  
-  // Rad 2: Skapar + Granskar
   { id: 'working', title: 'Skapar', emoji: '⚡', position: { x: 175, y: 225 } },
   { id: 'reviewing', title: 'Granskar', emoji: '👀', position: { x: 675, y: 225 } },
-  
-  // Rad 3: Klar
   { id: 'done', title: 'Klar!', emoji: '🎉', position: { x: 425, y: 410 } }
 ]
 function WorkArea({ isWorking, workSteps }) {
@@ -38,9 +33,9 @@ function WorkArea({ isWorking, workSteps }) {
     
     const yOffsets = {
       'stella': 0,
-      'luna': 35,
-      'pixel': 70,
-      'nova': 105
+      'nova': 35,
+      'luna': 70,
+      'pixel': 105
     }
     
       AGENTS.forEach((agent) => {
@@ -94,9 +89,9 @@ useEffect(() => {
     
     const yOffsets = {
       'stella': 0,
-      'luna': 35,
-      'pixel': 70,
-      'nova': 105
+      'nova': 35,
+      'luna': 70,
+      'pixel': 105
     }
 
     setAgentPositions(prev => ({

@@ -104,6 +104,22 @@ function App() {
       </div>
 
       <div className="legend-agent">
+        <div className="legend-avatar-box" style={{ backgroundColor: '#A78BFA', borderColor: 'black' }}>
+          <div className="legend-avatar-face">
+            <div className="legend-avatar-eyes">
+              <span className="legend-eye"></span>
+              <span className="legend-eye"></span>
+            </div>
+            <div className="legend-avatar-emoji">⭐</div>
+          </div>
+        </div>
+        <div className="legend-info">
+          <div className="legend-name">Nova</div>
+          <div className="legend-role">Kontrollerar</div>
+        </div>
+      </div>      
+
+      <div className="legend-agent">
         <div className="legend-avatar-box" style={{ backgroundColor: '#FF6B9D', borderColor: 'black' }}>
           <div className="legend-avatar-face">
             <div className="legend-avatar-eyes">
@@ -135,21 +151,7 @@ function App() {
         </div>
       </div>
 
-      <div className="legend-agent">
-        <div className="legend-avatar-box" style={{ backgroundColor: '#A78BFA', borderColor: 'black' }}>
-          <div className="legend-avatar-face">
-            <div className="legend-avatar-eyes">
-              <span className="legend-eye"></span>
-              <span className="legend-eye"></span>
-            </div>
-            <div className="legend-avatar-emoji">⭐</div>
-          </div>
-        </div>
-        <div className="legend-info">
-          <div className="legend-name">Nova</div>
-          <div className="legend-role">Kontrollerar</div>
-        </div>
-      </div>
+
     </div>
 
      <main className="app-main">
