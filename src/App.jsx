@@ -83,8 +83,8 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>🌟 Saga-Boken</h1>
-        <p>Skapa magiska sagor tillsammans med AI-agenter!</p>
+        <h1>Skriv en Saga 🌟</h1>
+        <p>Skapa sagor tillsammans med robotarna Stella, Luna, Pixel och Nova!</p>
       </header>
       <div className="agent-legend">
       <div className="legend-agent">
@@ -99,7 +99,7 @@ function App() {
         </div>
         <div className="legend-info">
           <div className="legend-name">Stella</div>
-          <div className="legend-role">Dirigent</div>
+          <div className="legend-role">Planerar</div>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ function App() {
         </div>
         <div className="legend-info">
           <div className="legend-name">Luna</div>
-          <div className="legend-role">Berättare</div>
+          <div className="legend-role">Skriver</div>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ function App() {
         </div>
         <div className="legend-info">
           <div className="legend-name">Pixel</div>
-          <div className="legend-role">Illustratör</div>
+          <div className="legend-role">Ritar</div>
         </div>
       </div>
 
@@ -147,7 +147,7 @@ function App() {
         </div>
         <div className="legend-info">
           <div className="legend-name">Nova</div>
-          <div className="legend-role">Granskare</div>
+          <div className="legend-role">Kontrollerar</div>
         </div>
       </div>
     </div>
@@ -233,7 +233,9 @@ function App() {
     </main>
 
       <footer className="app-footer">
-        <p>Gjord med ❤️ för barn</p>
+        <p>
+          Skapad av <a href="mailto:max.alterot@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>m.alterot</a> (fast mest av Claude helt ärligt...)
+        </p>
       </footer>
     </div>
   )

@@ -38,14 +38,14 @@ function WorkArea({ isWorking, workSteps }) {
     
     const yOffsets = {
       'stella': 0,
-      'luna': 25,
-      'pixel': 50,
-      'nova': 75
+      'luna': 35,
+      'pixel': 70,
+      'nova': 105
     }
     
-      AGENTS.forEach((agent, index) => {
+      AGENTS.forEach((agent) => {
         initialPositions[agent.id] = {
-          x: startPos.x - 40 + (index * 25),
+          x: 290,
           y: startPos.y + (yOffsets[agent.id] || 0)
         }
         initialStatuses[agent.id] = 'idle'
@@ -94,9 +94,9 @@ useEffect(() => {
     
     const yOffsets = {
       'stella': 0,
-      'luna': 20,
-      'pixel': 40,
-      'nova': 60
+      'luna': 35,
+      'pixel': 70,
+      'nova': 105
     }
 
     setAgentPositions(prev => ({
