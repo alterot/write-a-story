@@ -43,6 +43,33 @@ export async function createStory(userInput, onProgress) {
 
     await new Promise(resolve => setTimeout(resolve, 1500));
 
+    // Pixel stannar i start och tänker
+    const pixelThoughts = [
+      "🔮 Väntar på nya verktyg...",
+      "⏳ Snart får jag bättre penslar...",
+      "💭 Drömmer om DALL-E..."
+    ];
+
+    // Starta Pixel's tanke-loop i bakgrunden
+    const pixelThinkingInterval = setInterval(() => {
+      const randomThought = pixelThoughts[Math.floor(Math.random() * pixelThoughts.length)];
+      onProgress?.('agent:bubble', {
+        agentId: 'pixel',
+        bubble: randomThought
+      });
+    }, Math.random() * 7000 + 8000); // 8-15 sekunder random
+
+    // Första tanken direkt
+    onProgress?.('agent:bubble', {
+      agentId: 'pixel',
+      bubble: pixelThoughts[Math.floor(Math.random() * pixelThoughts.length)]
+    });
+
+    // Spara interval-ID så vi kan stoppa den senare
+    story._pixelInterval = pixelThinkingInterval;
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
     for (let i = 0; i < story.chapters.length; i++) {
       const chapter = story.chapters[i];
       let approved = false;
@@ -117,26 +144,14 @@ export async function createStory(userInput, onProgress) {
         await new Promise(resolve => setTimeout(resolve, 1500));
       }
 
-      // Pixel ritar (ingen iteration)
-      onProgress?.('agent:move', {
-        agentId: 'pixel',
-        toTask: 'working',
-        bubble: `🎨 Ritar kapitel ${i + 1}...`
-      });
-      
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      const illustration = await createIllustration(chapter.scene);
-      chapter.illustration = illustration;
-      
-      onProgress?.('agent:move', {
-        agentId: 'pixel',
-        toTask: 'reviewing',
-        bubble: `✅ Illustration ${i + 1} klar!`
-      });
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
+       await new Promise(resolve => setTimeout(resolve, 1000));
     }
+
+          // Stoppa Pixels tänkande
+      if (story._pixelInterval) {
+        clearInterval(story._pixelInterval);
+        delete story._pixelInterval;
+      }
 
     onProgress?.('agent:bubble', {
       agentId: 'nova',
@@ -241,7 +256,8 @@ Kom ihåg: 2-4 enkla meningar för barn 5-8 år.`;
   }
 }
 
-async function createIllustration(sceneDescription) {
+//Har tagits bort temporärt pga. blir ej så bra bilder än tyvärr
+/* async function createIllustration(sceneDescription) {
   const prompt = `Skapa en CSS-illustration för denna scen: ${sceneDescription}`;
   const response = await callClaude(AGENTS.illustrator.systemPrompt, prompt);
   
@@ -259,7 +275,7 @@ async function createIllustration(sceneDescription) {
       css: '.illustration-placeholder { font-size: 4rem; text-align: center; }'
     };
   }
-}
+} */
 
 async function reviewChapter(chapter, chapterNumber) {
   const prompt = `Granska detta kapitel från en barnsaga:
