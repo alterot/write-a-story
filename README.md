@@ -1,10 +1,10 @@
-# Saga-Boken
+# Write a Story
 
 En interaktiv webbapp där barn (5-8 år) kan skapa egna sagor med hjälp av AI-agenter som samarbetar synligt i realtid.
 
 ## Översikt
 
-Saga-Boken är ett lärprojekt som utforskar multi-agent AI-orkestration. Fyra specialiserade AI-agenter samarbetar för att skapa barnvänliga sagor, och hela processen visualiseras så att användaren ser hur agenterna itererar och förbättrar innehållet tillsammans.
+Write a Story är ett lärprojekt som utforskar multi-agent AI-orkestration. Fyra specialiserade AI-agenter samarbetar för att skapa barnvänliga sagor, och hela processen visualiseras så att användaren ser hur agenterna itererar och förbättrar innehållet tillsammans.
 
 ## Agenterna
 
@@ -18,10 +18,19 @@ Saga-Boken är ett lärprojekt som utforskar multi-agent AI-orkestration. Fyra s
 
 ## Teknisk Stack
 
-- React + Vite
-- Anthropic Claude API (Sonnet 4.5)
+- Frontend: React + Vite (GitHub Pages)
+- Backend: Cloudflare Worker (serverless API proxy)
+- AI: Anthropic Claude API (Sonnet 4.5)
 - Event-driven arkitektur för agent-koordination
 - CSS-animationer för agentrörelse
+
+## Arkitektur
+
+Applikationen använder en säker serverless-arkitektur där frontend och backend är separerade:
+
+**Frontend** (GitHub Pages) hanterar UI och agent-visualisering  
+**Cloudflare Worker** agerar som säker proxy mellan frontend och Claude API  
+**API-nycklar** lagras krypterade i Cloudflare secrets, aldrig exponerade i frontend-kod
 
 ## Viktiga Designbeslut
 
@@ -31,18 +40,21 @@ Saga-Boken är ett lärprojekt som utforskar multi-agent AI-orkestration. Fyra s
 
 **Korta sagor**: Nuvarande konfiguration är 2 kapitel om 2-4 meningar vardera. Detta begränsar token-kostnad (~0.10$ per saga) och underlättar utveckling. Prompts kan enkelt modifieras för längre berättelser.
 
-## Säkerhetsvarning
-
-Framtida förbättring: När DALL-E-integration läggs till kommer hela API-lagret flyttas till en backend-tjänst som säkrar alla nycklar ordentligt.
-
-## Installation
-
+### Lokal utveckling
 ```bash
-git clone https://github.com/YOUR-USERNAME/saga-boken.git
-cd saga-boken
+git clone https://github.com/alterot/write-a-story.git
+cd write-a-story
 npm install
 npm run dev
 ```
+
+Appen använder Cloudflare Worker för API-anrop, så ingen lokal API-nyckel behövs.
+
+### Produktion (med Cloudflare Worker)
+
+Backend-koden finns i separat repo: [write-a-story-worker](https://github.com/alterot/write-a-story-worker) (Inte pushad än, just nu bara lokal versionshantering) 
+
+Worker hanterar säker kommunikation med Claude API och kräver Cloudflare account.
 
 ## Innehållssäkerhet
 
@@ -50,11 +62,10 @@ Stella (orkestratorn) inkluderar automatisk innehållsvalidering som transformer
 
 ## Teknik
 
-React 18, Vite, Claude API (Sonnet 4.5), CSS3
+React 18, Vite, Cloudflare Workers, Claude API (Sonnet 4.5), CSS3
 
 ## Framtida Förbättringar
 
-- Backend-tjänst för säkra API-anrop
 - DALL-E-integration för riktiga bilder
 - Längre och mer komplexa berättelser
 - Export till PDF/HTML
