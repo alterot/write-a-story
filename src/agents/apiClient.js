@@ -1,14 +1,10 @@
-const API_URL = 'https://api.anthropic.com/v1/messages';
-const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
+const API_URL = 'https://write-a-story-worker.alterot.workers.dev';
 
 export async function callClaude(systemPrompt, userMessage, onStream = null) {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': API_KEY,
-      'anthropic-version': '2023-06-01',
-       'anthropic-dangerous-direct-browser-access': 'true' 
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',

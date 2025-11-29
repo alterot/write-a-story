@@ -43,7 +43,7 @@ function App() {
     if (eventData.toTask === 'done' && eventData.agentId === 'stella') {
       setTimeout(() => {
         setShowSuccess(true);
-      }, 4000);
+      }, 1000);
     }
     }
     
