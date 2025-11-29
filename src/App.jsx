@@ -233,10 +233,10 @@ function App() {
         )}
       </div>
     </main>
-
       <footer className="app-footer">
         <p>
-          Skapad av <a href="mailto:max.alterot@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>m.alterot</a> (fast mest av Claude helt ärligt...)
+          Skapad av <a href="mailto:max.alterot@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>m.alterot</a> (fast mest av Claude helt ärligt...) 
+          <a href="https://github.com/alterot/write-a-story" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>. Källkod finnes här</a>
         </p>
       </footer>
     </div>
